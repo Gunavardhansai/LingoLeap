@@ -1,0 +1,31 @@
+def maxMoves(grid):
+    m = len(grid)
+    n = len(grid[0])
+
+    # Initialize a 2D array dp to store the maximum moves at each cell
+    dp = [[0] * n for _ in range(m)]
+
+    # Iterate through each column starting from the last one
+    for col in range(n - 2, -1, -1):
+        for row in range(m):
+            currentCell = grid[row][col]
+            maxMoves = 0
+
+            # Check the cells to the right, above, and below the current cell
+            for newRow in range(row - 1, row + 2):
+                if 0 <= newRow < m:
+                    if grid[newRow][col + 1] > currentCell:
+                        maxMoves = max(maxMoves, dp[newRow][col + 1] + 1)
+
+            dp[row][col] = maxMoves
+
+    # Find the maximum moves in the first column
+    max_moves = max(dp[row][0] for row in range(m))
+
+    return max_moves
+
+grid1 = [[2, 4, 3, 5], [5, 4, 9, 3], [3, 4, 2, 11], [10, 9, 13, 15]]
+print(maxMoves(grid1))  # Output: 3
+
+grid2 = [[3, 2, 4], [2, 1, 9], [1, 1, 7]]
+print(maxMoves(grid2))  # Output: 0
