@@ -1,0 +1,39 @@
+var maxMoves = function(grid) {
+  const m = grid.length;
+  const n = grid[0].length;
+
+  // Initialize a 2D array dp to store the maximum moves at each cell
+  const dp = new Array(m).fill().map(() => new Array(n).fill(0));
+
+  // Iterate through each column starting from the last one
+  for (let col = n - 2; col >= 0; col--) {
+    for (let row = 0; row < m; row++) {
+      const currentCell = grid[row][col];
+      let maxMoves = 0;
+
+      // Check the cells to the right, above, and below the current cell
+      for (let newRow = row - 1; newRow <= row + 1; newRow++) {
+        if (newRow >= 0 && newRow < m) {
+          if (grid[newRow][col + 1] > currentCell) {
+            maxMoves = Math.max(maxMoves, dp[newRow][col + 1] + 1);
+          }
+        }
+      }
+
+      dp[row][col] = maxMoves;
+    }
+  }
+
+  // Find the maximum moves in the first column
+  let max = 0;
+  for (let row = 0; row < m; row++) {
+    max = Math.max(max, dp[row][0]);
+  }
+
+  return max;
+};
+const grid1 = [[2, 4, 3, 5], [5, 4, 9, 3], [3, 4, 2, 11], [10, 9, 13, 15]];
+console.log(maxMoves(grid1)); // Output: 3
+
+const grid2 = [[3, 2, 4], [2, 1, 9], [1, 1, 7]];
+console.log(maxMoves(grid2)); // Output: 0
